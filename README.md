@@ -1,47 +1,51 @@
-# Test# FORMA
+# FORMA
 
-**Thought to Matter. A system where imagination becomes reality.**
+**Thought to Matter.** A minimalist, AI-assisted platform for turning natural language prompts into 3D printable forms.
 
-FORMA is a minimalist, AI-assisted web platform that allows users to generate 3D-printable objects from natural language prompts. It is designed to serve as an interface between *human intention* and *physical form*, bridging design, emotion, and fabrication.
+This repository contains the MVP implementation built with React, Vite and Tailwind CSS. STL generation uses a simple inline placeholder when no Meshy.ai API key is provided.
 
----
+## Features
 
-## 🌐 Live Preview
+- Prompt submission form
+- 3D preview using `<model-viewer>`
+- Prompt categories
+- Supabase storage for prompts and orders
+- Stripe test checkout for print-on-demand
+- Public gallery and per-model view
+- Gallery search and category filter
 
-_This repository contains the full source code for FORMA v1 (MVP)._
-
-> Note: STL generation is currently simulated using placeholder models. Integration with real AI APIs (e.g. Meshy.ai or Tripo) is prepared but not live due to API cost constraints.
-
----
-
-## ✨ Features
-
-- 🔳 Clean React-based interface
-- 🧠 Prompt → STL preview pipeline (simulated)
-- 🎨 Embedded 3D model viewer (`<model-viewer>`)
-- 💾 Download or order printable files
-- 🖼️ Public gallery of generated artifacts
-- 🛒 Stripe test integration for physical print ordering
-- 📦 Supabase integration for prompt storage and gallery curation
-
----
-
-## 🔧 Stack
-
-| Layer       | Tech                     |
-|-------------|--------------------------|
-| Frontend    | React + Tailwind CSS     |
-| 3D Viewer   | `<model-viewer>` Web Component |
-| Backend     | Supabase (auth, DB, storage) |
-| Payments    | Stripe (test mode)       |
-| Future AI   | Meshy.ai, Tripo.ai (API) |
-
----
-
-## 🚀 Getting Started
-
-### 1. Clone the Repository
+## Getting Started
 
 ```bash
-git clone https://github.com/yourusername/forma.git
 cd forma
+npm install
+npm run dev
+```
+
+Create a `.env` file based on `.env.example` with your Supabase and Stripe keys.
+Optionally set `VITE_MESHY_API_KEY` for real model generation if you have access
+to Meshy.ai.
+
+## Database Schema
+
+```
+Table prompt_queue:
+  id uuid PK
+  prompt text
+  stl_url text
+  preview_url text
+  category text
+  is_public boolean default true
+  created_at timestamptz default now()
+
+Table orders:
+  id uuid PK
+  model_id uuid FK
+  email text
+  stripe_session text
+  created_at timestamptz
+```
+
+## License
+
+See [LICENSE](LICENSE) for details.
